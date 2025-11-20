@@ -7,6 +7,11 @@ type Drift struct {
 
 func Compare(codeSymbols, docSymbols []string) Drift {
 	drift := Drift{}
+
+	docMap := map[string]bool{}
+	for _, s := range docSymbols {
+		docMap[s.Name] = true 
+	}
 	
 
 	return drift

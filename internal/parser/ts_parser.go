@@ -71,17 +71,6 @@ func ParseTsFile(path string) []TSSymbol {
 				Kind: "class",
 			})
 		}
-
-		if strings.HasSuffix(p, ".ts") {
-			tsSymbols := ParseTsFile(p)
-			
-			for _, sym := range tsSymbols {
-				symbols = append(symbols, TSSymbol{
-					Name: sym.Name,
-					Kind: sym.Kind,
-				})
-			}
-		}
 	}
 
 	return symbols

@@ -23,10 +23,7 @@ func ParseCode(path string) []CodeSymbol {
 		if ext == ".ts" || ext == ".tsx" {
 			tsSym := ParseTsFile(p)
 			for _, ts := range tsSym {
-				symbols = append(symbols, CodeSymbol{
-					Name: ts.Name,
-					Kind: ts.Kind,
-				})
+				symbols = append(symbols, CodeSymbol(ts))
 			}
 		}
 

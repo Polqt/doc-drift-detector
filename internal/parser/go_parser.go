@@ -7,7 +7,6 @@ import (
 	"go/token"
 	"io/fs"
 	"path/filepath"
-	"strings"
 )
 
 type CodeSymbol struct {
@@ -29,14 +28,14 @@ func ParseGoCode(path string) []CodeSymbol {
 			return nil
 		}
 
-		// Check if file extension is .go
-		if filepath.Ext(d.Name()) != ".go" {
-			return nil
+		if err != nil {
+			return err
 		}
 
-		// Call function to parse this file
-		if !d.IsDir() && strings.HasSuffix(p, ".go") {
-			ParseGoCodeFile(p, &symbols)
+		// Check if file extension is .go
+		if filepath.Ext(d.Name()) == ".go" {
+			fileSymbols := ParseGoCodeFile(p)
+			symbols = append(symbols, fileSymbols...)
 		}
 
 		return nil

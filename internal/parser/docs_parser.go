@@ -2,37 +2,29 @@ package parser
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strings"
 )
 
-func ParseDocs(path string) []CodeSymbol {
-	symbols := []CodeSymbol{}
+func ParseDocs(path string) []string {
+	headings := []string{}
 
-	fmt.Println("Parsing docs from: ", path)
-
-	file, err := os.Open(path + "/example.md")
-	if err != nil {
-		fmt.Println("Error opening file: ", err)
-		return symbols
-	}
-
+	file, _ := os.Open(path)
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		line := scanner.Text()
+		line := strings.TrimSpace(scanner.Text())
 
 		// Detect if line is a header 
-		if strings.HasPrefix(line, "##") {
-			headerName := strings.TrimSpace(line[3:])
-			symbols = append(symbols, CodeSymbol{
-				Name: headerName,
-				Kind: "doc",
-			})
+		if strings.HasPrefix(line, "# ") {
+			headings = append(headings, strings.TrimPrefix(line, "# "))
+		}
+
+		if strings.HasPrefix(line, "## ") {
+			headings = append(headings, strings.TrimPrefix(line, "## "))
 		}
 	}
 
-	return symbols
+	return headings
 }

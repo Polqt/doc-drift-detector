@@ -3,7 +3,9 @@ package parser
 import (
 	"bufio"
 	"fmt"
+	"io/fs"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -74,5 +76,23 @@ func ParseTsFile(path string) []TSSymbol {
 	}
 
 	return symbols
+}
 
+func ParseTSFiles(folder string) []TSSymbol {
+	symbols := []TSSymbol{}
+
+	filepath.WalkDir(folder, func(p string, d fs.DirEntry, err error ) error {
+		if d.IsDir() {
+			return nil
+		}
+
+		if strings.HasSuffix(p, ".ts") {
+			fileSymbol := ParseTsFile(p)
+			symbols = append(symbols, fileSymbol...)
+		}
+
+		return  nil
+	})
+
+	return symbols
 }
